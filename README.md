@@ -2,7 +2,7 @@
 
 An AirPlay bridge for legacy **Sonos Connect:Amp (Gen 1)** hardware using a **Raspberry Pi**, **Shairport-sync**, and **Python**.
 
-This project breathes new life into older Sonos devices by capturing AirPlay audio, converting it into an HTTP live stream that Sonos can play, and handling smart automation like input switching and volume synchronization.
+This project breathes new life into older Sonos devices by capturing AirPlay audio, converting it into a local HTTP live stream that Sonos can play, and handling smart automation like input switching and volume synchronization.
 
 ---
 
@@ -15,17 +15,21 @@ This project breathes new life into older Sonos devices by capturing AirPlay aud
 
 ---
 
-## 🛠️ How It Works (Architecture)
+## 🛠️ How It Works & Current Performance
 
 1. **AirPlay Receiver:** The Raspberry Pi runs `shairport-sync` to act as an AirPlay target.
 2. **HTTP Stream:** Audio captured by Shairport is converted into an HTTP audio stream accessible by Sonos.
 3. **Python Automation:** Background Python scripts monitor the Shairport state and use the Sonos API (SoCo) to orchestrate everything.
 
+### 🔊 Audio Quality & Latency Performance
+* **Crisp Audio Quality:** The audio stream remains perfectly crisp, stable, and uninterrupted throughout playback, ensuring no loss in sound quality.
+* **The 5-Second Delay:** There is currently a ~5-second audio latency. This occurs because Sonos treats local HTTP streams like internet radio stations and applies an aggressive internal buffer to prevent stuttering. Optimizing the Shairport buffer and Python chunk sizes can help lower this, though a baseline buffer is enforced by the Sonos hardware.
+
 ### ⚠️ Note on Volume Control (Known Limitation)
 Due to the binary nature of iOS/iPhone volume steps, volume control behavior is currently a bit unique:
 * Volume scaling works **linearly** with the iPhone volume slider.
 * The script adjusts both the *output source volume* and the *Sonos hardware volume* simultaneously. 
-* *Result:* The volume curve works perfectly, but may feel a bit "funny" or non-standard when looking at the sliders.
+* *Result:* The volume curve works perfectly, but may feel a bit non-standard when looking at the sliders.
 
 ---
 
